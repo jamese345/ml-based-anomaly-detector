@@ -1,0 +1,72 @@
+======================================================================
+ML ANOMALY DETECTION — SOC INVESTIGATION REPORT
+======================================================================
+
+EXECUTIVE SUMMARY
+----------------------------------------------------------------------
+Events analyzed:       1050
+Normal events:         997
+Anomalous events:      53
+Anomaly rate:          5.05%
+
+PRIORITY BREAKDOWN
+----------------------------------------------------------------------
+HIGH:                  14
+MEDIUM:                26
+LOW:                   13
+
+TOP ANOMALIES
+----------------------------------------------------------------------
+
+1. Anomaly Score: -0.2239
+   Priority: HIGH
+   Reasons: Extreme failed attempts; Extreme login frequency; Extreme unique source ips; Extreme login hour; Extreme session duration; Extreme request count
+
+2. Anomaly Score: -0.2222
+   Priority: HIGH
+   Reasons: Extreme failed attempts; Extreme login frequency; Extreme unique source ips; Extreme login hour; Extreme session duration; Extreme request count
+
+3. Anomaly Score: -0.2148
+   Priority: HIGH
+   Reasons: Extreme failed attempts; Extreme login frequency; Extreme unique source ips; Extreme login hour; Extreme session duration; Extreme request count
+
+4. Anomaly Score: -0.2081
+   Priority: HIGH
+   Reasons: Extreme failed attempts; Extreme login frequency; Extreme unique source ips; Extreme login hour; Extreme session duration; Extreme request count
+
+5. Anomaly Score: -0.2080
+   Priority: HIGH
+   Reasons: Extreme failed attempts; Extreme login frequency; Extreme unique source ips; Extreme login hour; Extreme session duration; Extreme request count
+
+6. Anomaly Score: -0.2023
+   Priority: HIGH
+   Reasons: Extreme failed attempts; Extreme login frequency; Extreme unique source ips; Extreme login hour; Extreme session duration; Extreme request count
+
+7. Anomaly Score: -0.2013
+   Priority: HIGH
+   Reasons: Extreme failed attempts; Extreme login frequency; Extreme unique source ips; Extreme login hour; Extreme session duration; Extreme request count
+
+8. Anomaly Score: -0.1971
+   Priority: HIGH
+   Reasons: Extreme failed attempts; Extreme login frequency; Extreme unique source ips; Extreme login hour; Extreme session duration; Extreme request count
+
+9. Anomaly Score: -0.1964
+   Priority: HIGH
+   Reasons: Extreme failed attempts; Extreme login frequency; Extreme unique source ips; Extreme login hour; Extreme session duration; Extreme request count
+
+10. Anomaly Score: -0.1897
+   Priority: HIGH
+   Reasons: Extreme failed attempts; Extreme login frequency; Extreme unique source ips; Extreme login hour; Extreme session duration; Extreme request count
+
+RECOMMENDED SOC ACTION
+----------------------------------------------------------------------
+1. Investigate HIGH priority anomalies first.
+2. Review source IP and authentication activity.
+3. Examine unusual login frequency and failed attempts.
+4. Review session duration and request activity.
+5. Correlate suspicious events with other security logs.
+6. Escalate confirmed malicious activity for incident response.
+
+======================================================================
+END OF REPORT
+======================================================================
