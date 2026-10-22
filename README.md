@@ -1,171 +1,264 @@
 # 🧠 ML-Based Anomaly Detector
 
-A Python-based Security Operations Center (SOC) machine learning system that analyzes security events, learns normal behavioral patterns, detects anomalous activity using **Isolation Forest**, explains unusual behavior, assigns investigation priorities, and generates SOC-focused reports and visualizations.
+A machine learning-based cybersecurity project that uses **Python, Pandas, and Isolation Forest** to detect unusual security events, investigate anomalies, assign SOC priorities, and generate an automated investigation report.
 
-This project is part of my journey toward becoming an **AI SOC Analyst**, combining cybersecurity operations, Python automation, machine learning, and eventually AI-driven security analysis.
+This project is **Project 3** in my journey toward becoming an **AI SOC Analyst**.
 
 ---
 
 ## 🎯 Project Goal
 
-SOC environments generate large volumes of security events every day.
+Traditional SOC environments generate large volumes of security events, making it difficult for analysts to manually identify unusual behavior.
 
-Traditional detection rules are effective for known patterns, but they may not identify unusual behavior that does not match a predefined rule.
+The goal of this project is to build a practical machine learning pipeline that can:
 
-This project explores how **unsupervised machine learning** can help identify potentially suspicious security activity by learning behavioral patterns and detecting events that significantly differ from normal activity.
+- Analyze security event data
+- Engineer behavioral features
+- Detect unusual activity using machine learning
+- Calculate anomaly scores
+- Investigate detected anomalies
+- Explain suspicious behavior
+- Assign investigation priorities
+- Visualize results
+- Generate an automated SOC investigation report
+- Validate the system with automated tests
 
-The system automates the initial anomaly-analysis process by:
-
-- Generating security event data
-- Exploring security-event patterns
-- Engineering behavioral features
-- Training an Isolation Forest model
-- Detecting anomalous events
-- Calculating anomaly scores
-- Comparing anomalous behavior against normal baselines
-- Generating explanations for unusual behavior
-- Assigning investigation priorities
-- Generating a SOC visualization dashboard
-- Producing an automated SOC investigation report
-- Exporting machine-readable CSV results
-
-The goal is to provide SOC analysts with an additional behavioral signal that can help identify events requiring further investigation.
+The project focuses on building a foundation for future **AI-assisted SOC detection and investigation systems**.
 
 ---
 
-## 🏗️ Architecture
+## 📊 Project Results
+
+The completed pipeline analyzed **1,050 security events**.
+
+| Metric | Result |
+|---|---:|
+| 🔎 Events Analyzed | **1,050** |
+| ✅ Normal Events | **997** |
+| 🚨 Anomalous Events | **53** |
+| 📈 Anomaly Rate | **5.05%** |
+| 🔴 HIGH Priority | **14** |
+| 🟠 MEDIUM Priority | **26** |
+| 🟢 LOW Priority | **13** |
+| 🧪 Automated Tests | **8 passing** |
+
+### SOC Anomaly Dashboard
+
+The project generates a visual SOC dashboard showing anomaly statistics, priority distribution, anomaly scores, and feature behavior.
+
+![SOC Anomaly Dashboard](reports/anomaly_dashboard.png)
+
+---
+
+# 🏗️ Architecture
 
 ```text
-                    Security Events
+                    SECURITY EVENT DATA
                            │
                            ▼
-                  security_events.csv
-                           │
-                           ▼
-                   Data Exploration
-                           │
-                           ▼
-                  Feature Engineering
-                           │
-                           ▼
-                  Behavioral Features
-                           │
-                           ▼
-                  Isolation Forest
-                           │
-                           ▼
-                  Anomaly Detection
-                           │
-                ┌──────────┴──────────┐
-                ▼                     ▼
-           Normal Events          Anomalies
-                │                     │
-                │                     ▼
-                │             Anomaly Investigation
-                │                     │
-                │             ┌───────┴───────┐
-                │             ▼               ▼
-                │       Feature Analysis   Anomaly Score
-                │             │               │
-                │             └───────┬───────┘
-                │                     ▼
-                │              Priority Assignment
-                │                     │
-                │          ┌──────────┼──────────┐
-                │          ▼          ▼          ▼
-                │        HIGH       MEDIUM      LOW
-                │
-                └──────────────┬───────────────┘
-                               ▼
-                       SOC Visualization
-                               │
-                               ▼
-                       SOC Investigation
-                            Report
+                 ┌─────────────────────┐
+                 │  Data Exploration   │
+                 │   & Validation      │
+                 └──────────┬──────────┘
+                            │
+                            ▼
+                 ┌─────────────────────┐
+                 │ Feature Engineering │
+                 └──────────┬──────────┘
+                            │
+                            ▼
+                 ┌─────────────────────┐
+                 │   Isolation Forest  │
+                 │    Model Training   │
+                 └──────────┬──────────┘
+                            │
+                            ▼
+                 ┌─────────────────────┐
+                 │ Anomaly Detection   │
+                 └──────────┬──────────┘
+                            │
+                  ┌─────────┴─────────┐
+                  ▼                   ▼
+          Normal Events        Anomalous Events
+                                      │
+                                      ▼
+                            ┌───────────────────┐
+                            │ Anomaly           │
+                            │ Investigation     │
+                            └─────────┬─────────┘
+                                      │
+                                      ▼
+                            ┌───────────────────┐
+                            │ Priority          │
+                            │ Classification    │
+                            └─────────┬─────────┘
+                                      │
+                         ┌────────────┴────────────┐
+                         ▼                         ▼
+                  SOC Dashboard             SOC Report
 ```
 
 ---
 
-## 🔥 Key Features
+# 🔍 Key Features
 
-### 1. Security Event Analysis
+### 🧠 Machine Learning Detection
 
-The project analyzes security-event data containing behavioral information such as:
+Uses **Isolation Forest** to identify unusual security events without requiring manually labeled attack data.
 
-- Failed authentication attempts
+### 📊 Behavioral Feature Engineering
+
+Transforms raw security events into behavioral features such as:
+
+- Failed login attempts
 - Successful logins
 - Login frequency
-- Unique source IP addresses
+- Unique source IPs
 - Login hour
 - Session duration
 - Request count
 
-These features provide behavioral signals that can be used to identify unusual activity.
+### 🚨 Anomaly Scoring
 
----
+Each event receives an anomaly score from the Isolation Forest model.
 
-### 2. Feature Engineering
+More unusual observations receive stronger anomaly signals.
 
-Raw security-event information is transformed into machine-learning-ready behavioral features.
+### 🔎 Automated Investigation
 
-The model uses:
+Detected anomalies are compared against normal-event behavior to identify extreme or unusual feature values.
 
-| Feature | Description |
-|---|---|
-| `failed_attempts` | Number of failed authentication attempts |
-| `successful_logins` | Number of successful logins |
-| `login_frequency` | Frequency of login activity |
-| `unique_source_ips` | Number of unique source IP addresses |
-| `login_hour` | Hour when login activity occurred |
-| `session_duration` | Duration of the session |
-| `request_count` | Number of requests generated |
+### 🎯 Investigation Prioritization
 
-These features allow the model to identify behavioral patterns that differ from the learned baseline.
+Anomalies are categorized into:
 
----
+- **HIGH**
+- **MEDIUM**
+- **LOW**
 
-## 🤖 Machine Learning — Isolation Forest
+Priority is determined from the distribution of anomaly scores among detected anomalies.
 
-The project uses the **Isolation Forest** algorithm for unsupervised anomaly detection.
+### 📈 SOC Dashboard
 
-Isolation Forest is well suited to this project because it can identify unusual observations without requiring manually labeled malicious-event data.
+Generates a visual dashboard containing:
 
-The model produces:
+- Total events
+- Anomaly count
+- Anomaly rate
+- Priority distribution
+- Anomaly score distribution
+- Top anomalous events
+- Normal vs anomalous feature behavior
 
-- Normal events
-- Anomalous events
+### 📄 Automated SOC Report
+
+Generates a text-based investigation report containing:
+
+- Executive summary
+- Detection statistics
+- Priority breakdown
+- Top anomalies
 - Anomaly scores
+- Investigation reasons
+- Relevant event information
+- Recommended SOC actions
 
-Lower anomaly scores represent events that are more unusual according to the trained model.
+### 🧪 Automated Testing
 
-The model is saved using Joblib:
+Includes automated tests covering the core anomaly detection and investigation pipeline.
+
+---
+
+# 🛡️ Security Event Analysis
+
+The project works with simulated security events containing behavioral information that can be used to identify suspicious activity.
+
+Example features include:
 
 ```text
-models/isolation_forest.joblib
+failed_attempts
+successful_logins
+login_frequency
+unique_source_ips
+login_hour
+session_duration
+request_count
+```
+
+These features represent different aspects of user and system behavior.
+
+---
+
+# ⚙️ Feature Engineering
+
+Raw security event information is transformed into machine-learning features.
+
+The current model uses:
+
+| Feature | Purpose |
+|---|---|
+| `failed_attempts` | Detect excessive authentication failures |
+| `successful_logins` | Identify unusual successful authentication activity |
+| `login_frequency` | Identify unusually frequent login behavior |
+| `unique_source_ips` | Identify access from many different sources |
+| `login_hour` | Detect unusual login times |
+| `session_duration` | Identify unusual session behavior |
+| `request_count` | Detect unusually high activity |
+
+This creates a behavioral representation of each security event.
+
+---
+
+# 🧠 Machine Learning — Isolation Forest
+
+The project uses **Isolation Forest**, an unsupervised machine learning algorithm designed for anomaly detection.
+
+The model is useful for SOC environments because anomaly detection does not always require a large collection of labeled attack examples.
+
+The workflow is:
+
+```text
+Security Events
+      │
+      ▼
+Feature Engineering
+      │
+      ▼
+Isolation Forest
+      │
+      ▼
+Prediction
+      │
+      ▼
+Anomaly Score
+```
+
+The model classifies events as either:
+
+```text
+1   → Normal
+-1  → Anomalous
 ```
 
 ---
 
-## 🚨 Anomaly Detection
+# 🚨 Anomaly Detection
 
-The detection pipeline analyzes the complete security-event dataset and assigns each event:
-
-```text
-prediction
-anomaly_score
-is_anomaly
-```
-
-Current result:
+The detection stage analyzed:
 
 ```text
-Events analyzed:       1,050
-Normal events:           997
-Anomalous events:         53
-Anomaly rate:           5.05%
+Events analyzed: 1050
+Normal events detected: 997
+Anomalous events detected: 53
 ```
 
-The detection results are exported to:
+This produced an anomaly rate of approximately:
+
+```text
+5.05%
+```
+
+The results are saved to:
 
 ```text
 reports/anomaly_results.csv
@@ -173,20 +266,11 @@ reports/anomaly_results.csv
 
 ---
 
-## 🔎 Anomaly Investigation
+# 🔎 Anomaly Investigation
 
-Detected anomalies are passed through a second analysis layer.
+After detection, the anomalous events are investigated against the normal-event baseline.
 
-The investigation system compares anomalous events against the behavioral baseline of normal events.
-
-It identifies unusually large deviations in features such as:
-
-- Failed attempts
-- Login frequency
-- Unique source IPs
-- Login hour
-- Session duration
-- Request count
+The investigation identifies unusually extreme feature values and generates human-readable explanations.
 
 Example:
 
@@ -203,40 +287,35 @@ Reasons:
 - Extreme request count
 ```
 
-This adds an explainability layer to the machine-learning output.
+Investigation results are saved to:
+
+```text
+reports/anomaly_investigation.csv
+```
+
+This moves the project beyond simply detecting anomalies and toward **SOC analyst-style investigation and explainability**.
 
 ---
 
-## 🎯 Investigation Priority
+# 🎯 Investigation Priority
 
-Detected anomalies are prioritized based on their anomaly-score distribution.
-
-The system uses the distribution of detected anomalies to classify events into:
-
-| Priority | Meaning |
-|---|---|
-| HIGH | Most unusual detected behavior |
-| MEDIUM | Moderately unusual behavior |
-| LOW | Least unusual detected behavior |
-
-Current results:
+The 53 detected anomalies were prioritized using the distribution of anomaly scores.
 
 | Priority | Events |
 |---|---:|
-| HIGH | 14 |
-| MEDIUM | 26 |
-| LOW | 13 |
-| **Total** | **53** |
+| 🔴 HIGH | 14 |
+| 🟠 MEDIUM | 26 |
+| 🟢 LOW | 13 |
 
-This helps analysts focus first on the most unusual events.
+The prioritization is data-driven rather than relying on an arbitrary fixed anomaly-score threshold.
 
 ---
 
-## 📊 Anomaly Score Analysis
+# 📈 Anomaly Score Analysis
 
-The current anomaly-score distribution is:
+The detected anomaly scores were distributed as follows:
 
-| Metric | Score |
+| Statistic | Score |
 |---|---:|
 | Minimum | -0.223948 |
 | 25th Percentile | -0.177353 |
@@ -244,109 +323,100 @@ The current anomaly-score distribution is:
 | 75th Percentile | -0.148492 |
 | Maximum | -0.000468 |
 
-The project uses these observed score distributions rather than arbitrary fixed thresholds to determine investigation priority.
+The score distribution is used to separate detected anomalies into investigation priorities.
 
 ---
 
-## 📈 SOC Dashboard
+# 📊 SOC Dashboard
 
-The project generates a SOC-focused visualization dashboard containing:
-
-- Total events analyzed
-- Number of anomalies
-- Anomaly rate
-- Priority distribution
-- Anomaly-score distribution
-- Top 10 most anomalous events
-- Normal vs anomalous feature averages
-
-Generated dashboard:
+The project automatically generates:
 
 ```text
 reports/anomaly_dashboard.png
 ```
 
-The dashboard provides a quick visual overview of the machine-learning detection results.
+The dashboard provides a quick SOC-style overview of the detection results, including:
+
+- Event volume
+- Anomaly count
+- Anomaly percentage
+- Priority distribution
+- Anomaly score distribution
+- Top anomalous events
+- Feature comparison between normal and anomalous activity
+
+![SOC Anomaly Dashboard](reports/anomaly_dashboard.png)
 
 ---
 
-## 📝 Automated SOC Investigation Report
+# 📄 Automated SOC Investigation Report
 
-The project generates an automated text-based SOC investigation report containing:
-
-- Executive summary
-- Detection statistics
-- Anomaly rate
-- Priority breakdown
-- Top anomalous events
-- Anomaly scores
-- Investigation reasons
-- Recommended SOC actions
-
-Generated report:
+The project generates:
 
 ```text
 reports/anomaly_report.txt
 ```
 
-Example SOC workflow:
+The report contains:
+
+### Executive Summary
+
+A high-level overview of the detection results.
+
+### Detection Statistics
+
+Total events, normal events, anomalies, and anomaly rate.
+
+### Priority Breakdown
+
+Distribution of HIGH, MEDIUM, and LOW priority anomalies.
+
+### Top Anomalies
+
+The most significant anomalous events and their scores.
+
+### Investigation Reasons
+
+Explanations describing which behavioral features contributed to the suspicious classification.
+
+### SOC Recommendations
+
+Suggested analyst actions based on the investigation results.
+
+---
+
+# 🧪 Testing
+
+The project includes an automated test suite covering the main detection and investigation components.
+
+Tests include:
+
+- Anomaly detection
+- Anomaly score generation
+- Baseline calculation
+- Anomaly explanation
+- Priority classification
+- Report generation
+
+Test result:
 
 ```text
-Detect anomaly
-      ↓
-Calculate anomaly score
-      ↓
-Identify unusual features
-      ↓
-Assign investigation priority
-      ↓
-Generate analyst context
-      ↓
-Recommend investigation
+........
+----------------------------------------------------------------------
+Ran 8 tests in 0.052s
+
+OK
+```
+
+Run the tests with:
+
+```bash
+python -m unittest discover -s tests -v
 ```
 
 ---
 
-## 📊 Example Results
-
-The current implementation analyzed:
-
-```text
-==================================================
-       ML ANOMALY DETECTION — SOC RESULTS
-==================================================
-
-Events Analyzed:       1,050
-Normal Events:           997
-Anomalous Events:         53
-Anomaly Rate:           5.05%
-
-Priority Breakdown:
---------------------------------------------------
-HIGH:                     14
-MEDIUM:                   26
-LOW:                      13
-==================================================
-```
-
-One of the most anomalous events produced:
-
-```text
-Anomaly Score: -0.2239
-Priority: HIGH
-
-Reasons:
-- Extreme failed attempts
-- Extreme login frequency
-- Extreme unique source IPs
-- Extreme login hour
-- Extreme session duration
-- Extreme request count
-```
-
----
-
-## 📁 Project Structure
+# 📁 Project Structure
 
 ```text
 ml-based-anomaly-detector/
@@ -354,55 +424,59 @@ ml-based-anomaly-detector/
 ├── data/
 │   └── security_events.csv
 │
-├── models/
-│   └── isolation_forest.joblib
-│
 ├── reports/
-│   ├── anomaly_results.csv
-│   ├── anomaly_investigation.csv
 │   ├── anomaly_dashboard.png
-│   └── anomaly_report.txt
+│   ├── anomaly_investigation.csv
+│   ├── anomaly_report.txt
+│   └── anomaly_results.csv
 │
 ├── src/
-│   ├── generate_dataset.py
+│   ├── analyze_anomalies.py
+│   ├── detect_anomalies.py
 │   ├── explore_data.py
 │   ├── feature_engineering.py
+│   ├── generate_dataset.py
+│   ├── generate_report.py
 │   ├── train_model.py
-│   ├── detect_anomalies.py
-│   ├── analyze_anomalies.py
-│   ├── visualize_anomalies.py
-│   └── generate_report.py
+│   └── visualize_anomalies.py
 │
 ├── tests/
 │   ├── __init__.py
 │   └── test_anomaly_detector.py
 │
+├── .gitignore
 ├── README.md
-├── requirements.txt
-└── .gitignore
+└── requirements.txt
 ```
+
+The trained Isolation Forest model is intentionally excluded from Git tracking and can be regenerated locally.
 
 ---
 
-## ⚙️ Installation
+# 🚀 Installation
 
 Clone the repository:
 
 ```bash
 git clone https://github.com/jamese345/ml-based-anomaly-detector.git
+```
+
+Navigate into the project:
+
+```bash
 cd ml-based-anomaly-detector
 ```
 
 Create a virtual environment:
 
 ```bash
-python -m venv .venv
+python -m venv venv
 ```
 
 Activate it on Windows:
 
 ```bash
-.venv\Scripts\activate
+venv\Scripts\activate
 ```
 
 Install dependencies:
@@ -413,336 +487,237 @@ pip install -r requirements.txt
 
 ---
 
-## ▶️ Usage
+# ▶️ Usage
 
-### Generate the security-event dataset
+### 1. Generate Security Events
 
 ```bash
 python src/generate_dataset.py
 ```
 
-### Explore the dataset
+### 2. Explore the Dataset
 
 ```bash
 python src/explore_data.py
 ```
 
-### Engineer behavioral features
+### 3. Engineer Features
 
 ```bash
 python src/feature_engineering.py
 ```
 
-### Train the Isolation Forest model
+### 4. Train the Model
 
 ```bash
 python src/train_model.py
 ```
 
-### Detect anomalies
+### 5. Detect Anomalies
 
 ```bash
 python src/detect_anomalies.py
 ```
 
-### Investigate anomalies
+### 6. Investigate Anomalies
 
 ```bash
 python src/analyze_anomalies.py
 ```
 
-### Generate the SOC dashboard
+### 7. Generate SOC Dashboard
 
 ```bash
 python src/visualize_anomalies.py
 ```
 
-### Generate the SOC investigation report
+### 8. Generate SOC Report
 
 ```bash
 python src/generate_report.py
 ```
 
-### Run the automated tests
+### 9. Run Tests
 
 ```bash
-python -m unittest discover tests
+python -m unittest discover -s tests -v
 ```
 
 ---
 
-## 🧪 Testing
+# 🛠️ Technologies
 
-The project includes an automated test suite covering the core anomaly-detection and investigation functionality.
-
-Current result:
-
-```text
-........
-----------------------------------------------------------------------
-Ran 8 tests in 0.052s
-
-OK
-```
-
-The test suite covers:
-
-- Anomaly detection
-- Anomaly score generation
-- Baseline calculation
-- Anomaly explanation
-- HIGH priority classification
-- MEDIUM priority classification
-- LOW priority classification
-- SOC report generation
+- **Python**
+- **Pandas**
+- **NumPy**
+- **Scikit-learn**
+- **Joblib**
+- **Matplotlib**
+- **Unittest**
+- **CSV**
+- **Machine Learning**
+- **Git & GitHub**
 
 ---
 
-## 🛠️ Technologies
-
-- Python
-- Pandas
-- NumPy
-- Scikit-learn
-- Isolation Forest
-- Matplotlib
-- Joblib
-- unittest
-- Machine learning
-- SOC automation concepts
-- Behavioral anomaly detection
-- Explainable security analysis
-
----
-
-## 🔐 Security Concepts Demonstrated
+# 🔐 Security Concepts Demonstrated
 
 This project demonstrates practical understanding of:
 
 - Security event analysis
 - Behavioral anomaly detection
-- Authentication monitoring
 - Unsupervised machine learning
-- Isolation Forest
-- Anomaly scoring
 - Feature engineering
-- Security analytics
-- SOC investigation workflows
-- Alert prioritization
-- Explainable security automation
-- Automated SOC reporting
-- Analyst decision support
+- Baseline analysis
+- SOC alert prioritization
+- Detection explainability
+- Security data visualization
+- Automated investigation
+- SOC reporting
+- Python automation
+- Automated testing
 
 ---
 
-## ⚠️ Limitations
+# ⚠️ Limitations
 
-This project is a learning and portfolio implementation.
+This is a portfolio and learning project using simulated security data.
 
-An anomaly does **not** automatically mean malicious activity.
+Current limitations include:
 
-An unusual event may represent:
+- The dataset is synthetic
+- The model is trained on the generated dataset
+- Isolation Forest can produce false positives
+- Anomaly detection does not automatically mean malicious activity
+- Investigation explanations are feature-based rather than LLM-generated
+- No live SIEM integration is currently implemented
+- No real-time event streaming is currently implemented
+- Threat intelligence enrichment is not yet included
 
-- Legitimate user behavior
-- A rare but valid activity
-- Automated processes
-- Configuration changes
-- Administrative activity
-- Potential malicious behavior
-
-Therefore, anomaly detection should be treated as an **investigation signal**, not a final security verdict.
-
-In a production SOC environment, the anomaly detector would ideally be combined with additional security telemetry and context.
-
-Potential sources include:
-
-- SIEM events
-- Endpoint telemetry
-- Network telemetry
-- Authentication logs
-- Threat intelligence
-- User/entity behavior analytics
-- Detection rules
-- Incident response data
+These limitations provide opportunities for future development.
 
 ---
 
-## 🤖 Future AI Roadmap
+# 🔮 Future AI SOC Roadmap
 
-This project intentionally begins with **machine-learning-based anomaly detection** before introducing more advanced AI capabilities.
+This project is part of a larger AI SOC development roadmap.
 
-Future versions can evolve toward an AI-assisted SOC investigation system.
+### Project 1 — SOC Log Analyzer
+**Python + Security Logs**
+
+Built a rule-based security log analysis pipeline.
+
+### Project 2 — Automated Alert Triage Engine
+**Python + Detection + Risk Scoring**
+
+Built an automated alert triage and prioritization system.
+
+### Project 3 — ML-Based Anomaly Detector
+**Python + Machine Learning**
+
+Current project.
+
+Introduces behavioral anomaly detection using Isolation Forest.
+
+### Project 4 — Threat Intelligence Enrichment Engine
+**APIs + Automation + OSINT**
+
+Planned next.
+
+### Project 5 — Cybersecurity RAG Assistant
+**RAG + Embeddings + LLM**
+
+Planned.
+
+### Project 6 — AI SOC Investigation Agent
+**LLM + Tools + RAG + Python**
+
+Planned.
+
+### Project 7 — Full AI SOC Analyst Platform
+**Everything Combined**
+
+The long-term goal is to combine detection, triage, machine learning, threat intelligence, RAG, LLMs, and automated investigation into a complete AI-assisted SOC platform.
+
+---
+
+# 📚 Learning Progression
+
+This project represents the progression from rule-based cybersecurity automation toward machine learning-based security detection.
 
 ```text
-Current
-   │
-   ▼
-Isolation Forest
-   │
-   ▼
-Behavioral Anomaly Detection
-   │
-   ▼
+Project 1
+SOC Log Analyzer
+      │
+      ▼
+Project 2
+Automated Alert Triage
+      │
+      ▼
+Project 3
+ML-Based Anomaly Detection
+      │
+      ▼
+Project 4
 Threat Intelligence
-   │
-   ▼
-Machine Learning
-   │
-   ▼
-LLM-Assisted Investigation
-   │
-   ▼
-RAG Security Knowledge
-   │
-   ▼
-Automated Investigation
-   │
-   ▼
-AI SOC Analyst
-```
-
-Potential future capabilities include:
-
-- Real-time anomaly detection
-- SIEM integration
-- Threat intelligence enrichment
-- IP reputation analysis
-- MITRE ATT&CK mapping
-- Behavioral profiling
-- False-positive prediction
-- LLM-generated investigation summaries
-- Natural-language security investigation
-- RAG-based cybersecurity knowledge
-- Automated investigation playbooks
-- Alert correlation
-- Incident-response recommendations
-- Interactive SOC dashboard
-
-The long-term goal is to evolve these projects into an intelligent **AI SOC Analyst platform** capable of assisting analysts throughout the security investigation lifecycle.
-
----
-
-## 📈 Learning Progression
-
-This project represents the third stage of my cybersecurity automation journey.
-
-### Project 1
-
-🛡️ **SOC Log Analyzer**
-
-Focus:
-
-```text
-Python
-+
-Security Logs
-+
-Detection
-+
-Analysis
-```
-
-### Project 2
-
-🚨 **Automated Alert Triage Engine**
-
-Focus:
-
-```text
-Python
-+
-SOC Automation
-+
-Risk Scoring
-+
-Threat Intelligence
-+
-Alert Prioritization
-```
-
-### Project 3
-
-🧠 **ML-Based Anomaly Detector**
-
-Focus:
-
-```text
-Python
-+
-Machine Learning
-+
-Feature Engineering
-+
-Behavioral Analysis
-+
-Anomaly Detection
-+
-SOC Investigation
-```
-
-### Long-Term Goal
-
-🤖 **AI SOC Analyst**
-
-```text
-Cybersecurity
-+
-Python
-+
-Automation
-+
-Machine Learning
-+
-Threat Intelligence
-+
-AI
+      │
+      ▼
+Project 5
+Cybersecurity RAG
+      │
+      ▼
+Project 6
+AI SOC Investigation Agent
+      │
+      ▼
+Project 7
+Full AI SOC Analyst Platform
 ```
 
 ---
 
-## 👨‍💻 Author
+# 💡 Why This Project Matters
 
-I'm building practical cybersecurity projects while developing my skills in Python, security operations, automation, machine learning, and AI.
+A SOC analyst cannot manually investigate every event generated by a modern security environment.
 
-My long-term goal is to become an **AI SOC Analyst** focused on building intelligent systems for:
+Machine learning can help identify unusual behavior and reduce the amount of data analysts need to investigate manually.
 
-- Threat detection
-- Alert triage
-- Security automation
-- Anomaly detection
-- Incident investigation
-- Analyst decision support
+This project demonstrates the ability to build a complete pipeline that moves from:
 
----
+**Security Data → Machine Learning → Anomaly Detection → Investigation → Prioritization → Visualization → SOC Reporting**
 
-## ⭐ Project Status
-
-**Status: COMPLETE ✅**
-
-- 1,050 security events analyzed
-- 997 normal events detected
-- 53 anomalous events detected
-- 14 HIGH-priority anomalies
-- 26 MEDIUM-priority anomalies
-- 13 LOW-priority anomalies
-- Isolation Forest machine-learning model
-- Explainable anomaly investigation
-- Automated priority classification
-- SOC visualization dashboard
-- Automated SOC investigation report
-- 8 automated tests
-- 8 tests passing
-- End-to-end ML anomaly-detection pipeline
-- GitHub-ready documentation
+The next stage is to combine this capability with **threat intelligence and AI-assisted investigation**.
 
 ---
 
-## 📌 Why This Project Matters
+# 👨‍💻 Author
 
-This project demonstrates the ability to take a common SOC challenge — identifying unusual behavior in large volumes of security events — and build a Python-based machine-learning solution that produces actionable investigation signals.
+**Brian Owala**
 
-Rather than stopping at model training, the project connects:
+Cybersecurity Analyst focused on combining **Cybersecurity, Python, and AI**.
 
-**Machine Learning → Detection → Explanation → Prioritization → Visualization → SOC Reporting**
+Currently building practical AI SOC projects to strengthen my skills and develop intelligent security solutions.
 
-This provides a foundation for the next stage of my journey toward building an **AI-powered SOC Analyst**.
+🎯 Long-term goal: **AI SOC Analyst**
+
+---
+
+# 📌 Project Status
+
+**Status:** ✅ Completed
+
+**Project:** 3 / 7
+
+**Current Focus:** Machine Learning for Cybersecurity
+
+**Detection Model:** Isolation Forest
+
+**Tests:** 8 / 8 Passing
+
+**Next Project:** 🔎 Threat Intelligence Enrichment Engine
+
+---
+
+## ⭐ If You Find This Project Useful
+
+Feel free to explore the repository, review the implementation, and follow the journey as I continue building toward a complete **AI SOC Analyst platform**.
